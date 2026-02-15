@@ -1,12 +1,13 @@
 {
   "name": "opencode-quota",
-  "module": "index.ts",
+  "module": "src/index.ts",
   "type": "module",
-  "private": true,
   "scripts": {
-    "format": "prettier --write ."
+    "format": "prettier --write --log-level warn .",
+    "lint": "biome check . && prettier --check --log-level warn ."
   },
   "devDependencies": {
+    "@biomejs/biome": "2.4.0",
     "@types/bun": "latest",
     "prettier": "3.8.1"
   },
