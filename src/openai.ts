@@ -4,14 +4,18 @@ import { formatTimeUntil } from "./helpers";
 export interface openaiQuota {
   accountEmail: string;
   accountType: string;
-  primaryQuotaUsedPercent: number;
-  primaryQuotaRemainingPercent: number;
-  primaryQuotaResetAt: string;
-  primaryQuotaResetIn: string;
-  secondaryQuotaUsedPercent: number | null;
-  secondaryQuotaRemainingPercent: number | null;
-  secondaryQuotaResetAt: string | null;
-  secondaryQuotaResetIn: string | null;
+  primaryQuota: {
+    usedPercent: number | null;
+    remainingPercent: number | null;
+    resetAt: string | null;
+    resetIn: string | null;
+  };
+  secondaryQuota: {
+    usedPercent: number | null;
+    remainingPercent: number | null;
+    resetAt: string | null;
+    resetIn: string | null;
+  };
 }
 
 interface openaiQuotaRawResponse {
@@ -80,18 +84,22 @@ export async function getOpenaiQuota(creds: Credentials): Promise<openaiQuota> {
   return {
     accountEmail: result.email,
     accountType: result.plan_type,
-    primaryQuotaUsedPercent: primaryUsedPercent,
-    primaryQuotaRemainingPercent: clampPercent(100 - primaryUsedPercent),
-    primaryQuotaResetAt: primaryResetAt,
-    primaryQuotaResetIn: formatTimeUntil(primaryResetAt),
-    secondaryQuotaUsedPercent: secondaryUsedPercent,
-    secondaryQuotaRemainingPercent:
-      secondaryUsedPercent === null
-        ? null
-        : clampPercent(100 - secondaryUsedPercent),
-    secondaryQuotaResetAt: secondaryResetAt,
-    secondaryQuotaResetIn:
-      secondaryResetAt === null ? null : formatTimeUntil(secondaryResetAt),
+    primaryQuota: {
+      usedPercent: primaryUsedPercent,
+      remainingPercent: clampPercent(100 - primaryUsedPercent),
+      resetAt: primaryResetAt,
+      resetIn: formatTimeUntil(primaryResetAt),
+    },
+    secondaryQuota: {
+      usedPercent: secondaryUsedPercent,
+      remainingPercent:
+        secondaryUsedPercent === null
+          ? null
+          : clampPercent(100 - secondaryUsedPercent),
+      resetAt: secondaryResetAt,
+      resetIn:
+        secondaryResetAt === null ? null : formatTimeUntil(secondaryResetAt),
+    },
   };
 }
 
