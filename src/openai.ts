@@ -3,22 +3,15 @@ import { formatTimeUntil } from "./helpers";
 
 export interface openaiQuota {
   accountEmail: string;
-  accountId: string;
   accountType: string;
-  allowed: boolean;
-  limitReached: boolean;
-  primaryUsedPercent: number;
-  primaryRemainingPercent: number;
-  primaryLimitWindowSeconds: number;
-  primaryResetAfterSeconds: number;
-  primaryResetAt: string;
-  primaryResetIn: string;
-  secondaryUsedPercent: number | null;
-  secondaryRemainingPercent: number | null;
-  secondaryLimitWindowSeconds: number | null;
-  secondaryResetAfterSeconds: number | null;
-  secondaryResetAt: string | null;
-  secondaryResetIn: string | null;
+  primaryQuotaUsedPercent: number;
+  primaryQuotaRemainingPercent: number;
+  primaryQuotaResetAt: string;
+  primaryQuotaResetIn: string;
+  secondaryQuotaUsedPercent: number | null;
+  secondaryQuotaRemainingPercent: number | null;
+  secondaryQuotaResetAt: string | null;
+  secondaryQuotaResetIn: string | null;
 }
 
 interface openaiQuotaRawResponse {
@@ -86,27 +79,18 @@ export async function getOpenaiQuota(creds: Credentials): Promise<openaiQuota> {
 
   return {
     accountEmail: result.email,
-    accountId: result.account_id,
     accountType: result.plan_type,
-    allowed: result.rate_limit.allowed,
-    limitReached: result.rate_limit.limit_reached,
-    primaryUsedPercent: primaryUsedPercent,
-    primaryRemainingPercent: clampPercent(100 - primaryUsedPercent),
-    primaryLimitWindowSeconds: Math.max(0, primary.limit_window_seconds),
-    primaryResetAfterSeconds: Math.max(0, primary.reset_after_seconds),
-    primaryResetAt: primaryResetAt,
-    primaryResetIn: formatTimeUntil(primaryResetAt),
-    secondaryUsedPercent: secondaryUsedPercent,
-    secondaryRemainingPercent:
+    primaryQuotaUsedPercent: primaryUsedPercent,
+    primaryQuotaRemainingPercent: clampPercent(100 - primaryUsedPercent),
+    primaryQuotaResetAt: primaryResetAt,
+    primaryQuotaResetIn: formatTimeUntil(primaryResetAt),
+    secondaryQuotaUsedPercent: secondaryUsedPercent,
+    secondaryQuotaRemainingPercent:
       secondaryUsedPercent === null
         ? null
         : clampPercent(100 - secondaryUsedPercent),
-    secondaryLimitWindowSeconds:
-      secondary === null ? null : Math.max(0, secondary.limit_window_seconds),
-    secondaryResetAfterSeconds:
-      secondary === null ? null : Math.max(0, secondary.reset_after_seconds),
-    secondaryResetAt: secondaryResetAt,
-    secondaryResetIn:
+    secondaryQuotaResetAt: secondaryResetAt,
+    secondaryQuotaResetIn:
       secondaryResetAt === null ? null : formatTimeUntil(secondaryResetAt),
   };
 }
