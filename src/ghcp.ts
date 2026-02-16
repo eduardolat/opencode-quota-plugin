@@ -2,7 +2,7 @@ import type { Credentials } from "./creds";
 import { formatTimeUntil } from "./helpers";
 
 export interface ghcpQuota {
-  accountEmail: string;
+  accountUser: string;
   accountType: string;
   requestsTotal: number;
   requestsUsed: number;
@@ -102,7 +102,7 @@ export async function getGhcpQuota(creds: Credentials): Promise<ghcpQuota> {
   const prUsedPercent = Math.max(0, 100 - prRemainingPercent);
 
   return {
-    accountEmail: result.login,
+    accountUser: result.login,
     accountType: result.access_type_sku,
     requestsTotal: prTotal,
     requestsUsed: prUsed,
