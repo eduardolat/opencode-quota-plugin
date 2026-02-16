@@ -6,4 +6,4 @@ RUN ln -s /usr/local/bin/bun /usr/local/bin/node
 
 RUN \
   apt update -qq && \
-  apt install -yqq git curl wget ripgrep
+  apt install -yqq git curl wget npm ripgrep
