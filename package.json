@@ -1,14 +1,14 @@
 {
   "name": "opencode-quota",
   "type": "module",
-  "module": "./src/index.ts",
-  "main": "./src/index.ts",
+  "main": "./dist/index.js",
   "exports": {
     ".": {
-      "import": "./src/index.ts"
+      "import": "./dist/index.js"
     }
   },
   "scripts": {
+    "build": "bun build ./src/index.ts --outdir ./dist --format cjs",
     "format": "prettier --write --log-level warn .",
     "test": "bun test",
     "lint": "biome check . && prettier --check --log-level warn ."
